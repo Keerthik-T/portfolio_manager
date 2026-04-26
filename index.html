@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantamental AI Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --bg: #f3f4f6;
+            --card: #ffffff;
+            --text: #1f2937;
+            --text-light: #6b7280;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 2rem;
+        }
+        .container { max-width: 1200px; margin: auto; }
+        h1 { margin-bottom: 0.5rem; }
+        p.subtitle { color: var(--text-light); margin-bottom: 2rem; }
+        
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+        @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
+        
+        .card { background: var(--card); padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .summary { display: flex; justify-content: space-between; align-items: center; }
+        .summary h2 { margin: 0; font-size: 2rem; }
+        
+        form { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .full { grid-column: 1 / -1; }
+        input { padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; width: 100%; box-sizing: border-box;}
+        button { padding: 0.75rem; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        button:hover { opacity: 0.9; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th, td { text-align: left; padding: 1rem; border-bottom: 1px solid #e5e7eb; }
+        th { color: var(--text-light); font-size: 0.875rem; text-transform: uppercase; }
+        
+        .badge { padding: 0.25rem 0.5rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
+        .bg-buy { background: #d1fae5; color: #065f46; }
+        .bg-sell { background: #fee2e2; color: #991b1b; }
+        .bg-hold { background: #f3f4f6; color: #374151; }
+
+        .chart-container { position: relative; height: 300px; width: 100%; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Quantamental AI Portfolio Manager</h1>
+        <p class="subtitle">AI Sentiment & Volatility Optimized Holdings</p>
+        
+        <div class="grid">
+            <div class="card summary">
+                <div>
+                    <h3 style="margin: 0; color: var(--text-light); font-weight: 500;">Total Value</h3>
+                    <h2 id="totalValue">$0.00</h2>
+                </div>
+                <div style="text-align: right;">
+                    <h3 style="margin: 0; color: var(--text-light); font-weight: 500;">Unrealized P&L</h3>
+                    <h2 id="totalGain">+$0.00</h2>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3 style="margin-top: 0;">Add / Update Holding</h3>
+                <form id="addForm">
+                    <input type="text" id="symbol" placeholder="Symbol (e.g. AAPL)" required>
+                    <input type="number" id="shares" placeholder="Shares" step="any" required>
+                    <input type="number" id="avg_price" placeholder="Avg Entry Price" step="any" required>
+                    <input type="number" id="target_profit" placeholder="Target Profit % (Def: 15)" step="any">
+                    <input type="number" id="vol_threshold" placeholder="Max Volatility % (Def: 5)" step="any">
+                    <input type="number" id="target_entry" placeholder="Target Entry Price (Optional)" step="any">
+                    <button type="submit" class="full">Save Holding</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <h3 style="margin-top: 0;">Portfolio Allocation</h3>
+                <div class="chart-container">
+                    <canvas id="allocationChart"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <h3 style="margin-top: 0;">Sentiment vs. Action Map</h3>
+                <div class="chart-container">
+                    <canvas id="sentimentChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="overflow-x: auto;">
+            <h3 style="margin-top: 0;">AI Insights & Holdings</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Asset</th>
+                        <th>Pos/Price</th>
+                        <th>P&L</th>
+                        <th>Risk (Vol)</th>
+                        <th>NLP Sentiment</th>
+                        <th>Quantamental Action</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr><td colspan="7" style="text-align:center;">Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
