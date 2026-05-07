@@ -3,7 +3,7 @@ Main Flask Application for Quantamental AI Portfolio Manager.
 Uses Waitress for production serving and APScheduler for automated fetching.
 """
 import logging
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from database import db
 from models import PortfolioItem, SentimentCache
@@ -48,6 +48,17 @@ scheduler = BackgroundScheduler()
 scheduler.add_job(func=refresh_sentiment_cache, trigger="interval", hours=4)
 scheduler.start()
 
+
+# Frontend Routes
+@app.route('/')
+def serve_index():
+    return send_from_directory(basedir, 'index.html')
+
+@app.route('/<path:path>')
+def serve_static(path):
+    if os.path.exists(os.path.join(basedir, path)):
+        return send_from_directory(basedir, path)
+    return "File not found", 404
 
 @app.route('/api/dashboard', methods=['GET'])
 def get_dashboard():
